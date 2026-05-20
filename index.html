@@ -1,14 +1,181 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>운동 루틴 생성기</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+<div class="container">
+
+<header>
+  <div class="title">WORKOUT<br>BUILDER</div>
+  <div class="subtitle">맞춤 운동 루틴 생성기 · 부상 회피 지원</div>
+</header>
+
+<div id="form">
+
+  <div class="form-group">
+    <div class="step-label">01 / 신체 정보</div>
+    <div class="body-info">
+      <input type="number" id="height" placeholder="키 (cm)">
+      <input type="number" id="weight" placeholder="몸무게 (kg)">
+      <input type="number" id="age" placeholder="나이">
+      <select id="gender">
+        <option value="">성별 선택</option>
+        <option value="male">남성</option>
+        <option value="female">여성</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="step-label">02 / 운동 경력 <span class="hint">강도 자동 조절</span></div>
+    <div class="chip-group" id="experience">
+      <button class="chip" data-value="easy">초급 · 1년 미만</button>
+      <button class="chip" data-value="normal">중급 · 1~3년</button>
+      <button class="chip" data-value="hard">고급 · 3년 이상</button>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="step-label">03 / 경험해본 운동 <span class="hint">복수 선택 · 선택 사항</span></div>
+    <div class="chip-group" id="history">
+      <button class="chip" data-value="헬스">헬스</button>
+      <button class="chip" data-value="홈트">홈트</button>
+      <button class="chip" data-value="요가">요가</button>
+      <button class="chip" data-value="필라테스">필라테스</button>
+      <button class="chip" data-value="크로스핏">크로스핏</button>
+      <button class="chip" data-value="러닝">러닝</button>
+      <button class="chip" data-value="수영">수영</button>
+      <button class="chip" data-value="구기종목">구기종목</button>
+      <button class="chip" data-value="격투기">격투기</button>
+      <input type="text" class="custom-input" id="history-custom" placeholder="기타 (예: 클라이밍)">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="step-label">04 / 선호 운동 종류 <span class="hint">복수 선택</span></div>
+    <div class="chip-group" id="types">
+      <button class="chip" data-value="유산소">유산소</button>
+      <button class="chip" data-value="무산소">무산소</button>
+      <button class="chip" data-value="근력">근력</button>
+      <button class="chip" data-value="스트레칭">스트레칭</button>
+      <input type="text" class="custom-input" id="types-custom" placeholder="기타 (예: 댄스)">
+    </div>
+  </div>
+
+  <div class="form-group" id="workout-style-group">
+    <div class="step-label">04-1 / 운동 스타일</div>
+    <div class="chip-group" id="cardioStyle">
+      <button class="chip" data-value="long">단일 종목 길게 <span style="opacity:0.6;font-size:12px">· 3~5개, 각 10분</span></button>
+      <button class="chip" data-value="hiit">HIIT 스타일 <span style="opacity:0.6;font-size:12px">· 많은 종목, 각 짧게</span></button>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="step-label">05 / 운동 시간</div>
+    <div class="chip-group" id="duration">
+      <button class="chip" data-value="30">30분</button>
+      <button class="chip" data-value="45">45분</button>
+      <button class="chip" data-value="60">60분</button>
+      <button class="chip" data-value="90">90분</button>
+      <div class="custom-input-wrap">
+        <span>직접 입력</span>
+        <input type="number" id="duration-custom" placeholder="0" min="10" max="180">
+        <span>분</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="step-label">06 / 장소</div>
+    <div class="chip-group" id="place">
+      <button class="chip" data-value="홈트">홈트</button>
+      <button class="chip" data-value="헬스장">헬스장</button>
+      <button class="chip" data-value="야외">야외</button>
+      <button class="chip" data-value="공원">공원</button>
+      <input type="text" class="custom-input" id="place-custom" placeholder="기타 (예: 옥상, 회사)">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="step-label">07 / 부상 부위 <span class="hint">해당 부위 운동 제외</span></div>
+    <div class="chip-group" id="injuries">
+      <button class="chip injury" data-value="무릎">무릎</button>
+      <button class="chip injury" data-value="허리">허리</button>
+      <button class="chip injury" data-value="어깨">어깨</button>
+      <button class="chip injury" data-value="손목">손목</button>
+      <button class="chip injury" data-value="발목">발목</button>
+      <button class="chip injury" data-value="목">목</button>
+      <button class="chip injury" data-value="팔꿈치">팔꿈치</button>
+      <button class="chip injury" data-value="고관절">고관절</button>
+      <input type="text" class="custom-input injury" id="injuries-custom" placeholder="기타 (예: 손가락)">
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 10px; margin-top: 16px;">
+    <button class="btn-generate" id="generate" style="flex: 3; margin-top: 0;">루틴 생성하기</button>
+    <button class="btn-reset" id="reset" style="flex: 1;">초기화</button>
+  </div>
+</div>
+
+<div class="result" id="result">
+  <div class="result-header">
+    <div class="step-label">RESULT</div>
+    <div style="font-size: 20px; font-weight: 600; margin-top: 4px;">오늘의 루틴</div>
+    <div class="intensity-badge" id="intensity-badge"></div>
+    <div class="result-stats">
+      <div><div class="stat-label">총 시간</div><div class="stat-value" id="total-time">0분</div></div>
+      <div><div class="stat-label">운동 수</div><div class="stat-value" id="total-count">0개</div></div>
+      <div><div class="stat-label">소모 칼로리</div><div class="stat-value" id="total-cal">0</div></div>
+    </div>
+    <div class="excluded-badge" id="excluded" style="display:none"></div>
+  </div>
+  
+  <div class="exercise-list" id="list"></div>
+  
+  <button class="btn-generate" id="start-timer" style="margin-top: 16px;">⏱ 타이머와 함께 시작하기</button>
+  
+  <button class="btn-secondary" id="regenerate" style="margin-top: 8px;">다른 조합으로 다시 생성</button>
+  <button class="btn-secondary" id="save-routine" style="margin-top: 8px;">💾 이 루틴 저장하기</button>
+  <button class="btn-secondary" id="restart" style="margin-top: 8px;">처음으로 돌아가기</button>
+  
+  <div class="disclaimer">
+    <strong>주의</strong> · 본 추천은 일반 가이드입니다. 의학적 진단을 대체하지 않습니다. 통증·만성질환·임신 등 특수 상황에서는 의료진·전문 트레이너와 상담 후 진행하세요. 운동 중 통증·어지러움 발생 시 즉시 중단하세요.
+  </div>
+</div>
+
+<div id="saved-section" style="margin-top: 32px; display: none;">
+  <header style="border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 20px;">
+    <div class="step-label">SAVED</div>
+    <div style="font-size: 22px; font-weight: 600; margin-top: 4px;">저장된 루틴</div>
+  </header>
+  <div id="saved-list"></div>
+</div>
+
+<!-- 타이머 모달 -->
+<div id="timer-modal" class="timer-modal">
+  <div class="timer-content">
+    <button class="timer-close" id="timer-close">✕</button>
+    <div class="timer-phase" id="timer-phase">운동</div>
+    <div class="timer-exercise" id="timer-exercise">스쿼트</div>
+    <div class="timer-set" id="timer-set">1 / 3 세트</div>
+    <div class="timer-display" id="timer-display">00:30</div>
+    <div class="timer-controls">
+      <button class="timer-btn" id="timer-pause">일시정지</button>
+      <button class="timer-btn skip" id="timer-skip">건너뛰기 →</button>
+    </div>
+    <div class="timer-progress">
+      <div class="timer-progress-bar" id="timer-progress-bar"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script defer src="main.js"></script>
 </body>
 </html>
